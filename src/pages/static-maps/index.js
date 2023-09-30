@@ -1,21 +1,21 @@
 import generateStaticMapURL from '../../../utils/map-utils'
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 export default function Home() {
     const [center, setCenter] = useState("Eiffel Tower,Paris");
     const [mapType, setMapType] = useState("roadmap");
-    const [visible, setVisible] = useState("Eiffel Tower,Paris|Musée Rodin,Paris");
+    const [visible, setVisible] = useState("Eiffel Tower,Paris|Jardin des Plantes,Paris");
     const [scale, setScale] = useState("1");
     const [zoom, setZoom] = useState("12");
     const [size, setSize] = useState("480x480");
-    const [path, setPath] = useState("color:0x0000ff|weight:5|Eiffel Tower,Paris|Musée Rodin,Paris");
+    const [path, setPath] = useState("color:0x0000ff|weight:5|Eiffel Tower,Paris|Jardin des Plantes,Paris");
     const [markersString, setMarkersString] = useState(
         `color:red|label:E|Eiffel Tower,Paris
-color:blue|label:M|Musée Rodin,Paris`
+color:blue|label:M|Jardin des Plantes,Paris`
     );
     const [imageUrl, setImageUrl] = useState('');
 
-    function handleGenerate() {
+    const handleGenerate = useCallback(() => {
         const staticImageURL = generateStaticMapURL({
             center,
             mapType,
@@ -31,7 +31,7 @@ color:blue|label:M|Musée Rodin,Paris`
         });
 
         setImageUrl(staticImageURL);
-    }
+    }, [center, mapType, zoom, size, scale, path, visible, markersString])
 
     useEffect(() => {
         handleGenerate();
@@ -41,8 +41,8 @@ color:blue|label:M|Musée Rodin,Paris`
     const imageHeight = size.split("x")[1];
 
     return (
-        <main className='p-4 flex gap-4'>
-            <div className="basis-4/12">
+        <main className='p-4 grid grid-cols-12 gap-4'>
+            <div className="col-span-6">
                 <h1 className='text-2xl font-bold'>Static Map API</h1>
                 <p className='text-gray-500'>Generate static map images with markers</p>
                 <a className="text-blue-500 hover:text-blue-700" href="/">Home</a>
@@ -65,24 +65,24 @@ color:blue|label:M|Musée Rodin,Paris`
                         </select>
                     </div>
 
-                    <div className="flex gap-1">
-                    <div className="flex flex-col space-y-1">
-                        <label htmlFor="zoom" className="text-gray-700 font-medium">Zoom</label>
-                        <input id="zoom" type="number" value={zoom} onChange={e => setZoom(e.target.value)}
-                               className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-                    </div>
+                    <div className="flex justify-between gap-1">
+                        <div className="flex flex-col space-y-1">
+                            <label htmlFor="zoom" className="text-gray-700 font-medium">Zoom</label>
+                            <input id="zoom" type="number" value={zoom} onChange={e => setZoom(e.target.value)}
+                                   className="w-32 border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                        </div>
 
-                    <div className="flex flex-col space-y-1">
-                        <label htmlFor="size" className="text-gray-700 font-medium">Size</label>
-                        <input id="size" type="text" value={size} onChange={e => setSize(e.target.value)}
-                               className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-                    </div>
+                        <div className="flex flex-col space-y-1">
+                            <label htmlFor="size" className="text-gray-700 font-medium">Size</label>
+                            <input id="size" type="text" value={size} onChange={e => setSize(e.target.value)}
+                                   className="w-32 border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                        </div>
 
-                    <div className="flex flex-col space-y-1">
-                        <label htmlFor="scale" className="text-gray-700 font-medium">Scale</label>
-                        <input id="scale" type="number" value={scale} onChange={e => setScale(e.target.value)}
-                                 className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-                    </div>
+                        <div className="flex flex-col space-y-1">
+                            <label htmlFor="scale" className="text-gray-700 font-medium">Scale</label>
+                            <input id="scale" type="number" value={scale} onChange={e => setScale(e.target.value)}
+                                   className="w-32 border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                        </div>
                     </div>
 
                     <div className="flex flex-col space-y-1">
@@ -94,13 +94,13 @@ color:blue|label:M|Musée Rodin,Paris`
                     <div className="flex flex-col space-y-1">
                         <label htmlFor="path" className="text-gray-700 font-medium">Path</label>
                         <input id="path" type="text" value={path} onChange={e => setPath(e.target.value)}
-                                 className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                               className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                     </div>
 
                     <div className="flex flex-col space-y-1">
                         <label htmlFor="visible" className="text-gray-700 font-medium">Visible</label>
                         <input id="visible" type="text" value={visible} onChange={e => setVisible(e.target.value)}
-                                    className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                               className="border border-gray-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                     </div>
 
                     <div className="flex flex-col space-y-1">
@@ -111,8 +111,25 @@ color:blue|label:M|Musée Rodin,Paris`
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="col-span-6 flex flex-col">
                 <img alt="Map" width={imageWidth} height={imageHeight} src={imageUrl}/>
+
+                <div className="mt-4">
+                    <h2 className="text-xl font-bold">Things to Try</h2>
+                    <a className="text-blue-500 hover:text-blue-700"
+                       href="https://developers.google.com/maps/documentation/maps-static/start">Google Static Maps Documentation</a>
+                    <ul className="p-4 rounded-md">
+                        <li>Different <b>Zoom levels, Map Types and Scale</b></li>
+                        <li></li>
+                        <li>
+                            Clear <b>Center, Zoom, Markers, Path</b> and click the <b>Generate</b> button
+                        </li>
+                        <li>
+                            Change <b>Markers</b> to use image icons<br/>
+                            <code className="block bg-gray-100 p-2 m-1">icon:https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png|Eiffel Tower,Paris</code>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </main>
     )
