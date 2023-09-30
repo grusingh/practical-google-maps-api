@@ -1,7 +1,7 @@
 /***
-* Generate Google Maps Static API URL from params
-* 
-*/
+ * Generate Google Maps Static API URL from params
+ *
+ */
 
 function generateStaticMapURL(params) {
     // Define the base URL for Google Static Maps API
@@ -32,10 +32,20 @@ function generateStaticMapURL(params) {
         queryParams.push(`maptype=${params.mapType}`);
     }
 
-    // Construct the final URL by joining all query parameters
-    const mapURL = `${baseURL}${queryParams.join("&")}`;
+    if (params.scale) {
+        queryParams.push(`scale=${params.scale}`);
+    }
 
-    return mapURL;
+    if (params.path) {
+        queryParams.push(`path=${encodeURIComponent(params.path)}`);
+    }
+
+    if (params.visible) {
+        queryParams.push(`visible=${encodeURIComponent(params.visible)}`);
+    }
+
+    // Construct the final URL by joining all query parameters
+    return `${baseURL}${queryParams.join("&")}`;
 }
 
 export default generateStaticMapURL;
