@@ -1,17 +1,6 @@
 /***
 * Generate Google Maps Static API URL from params
 * 
-* Example usage:
-* const mapParams = {
-* center: "New+York,NY",
-*  zoom: 12,
-*  size: "800x600",
-*  markers: "color:red|label:A|New+York,NY",
-*  apiKey: "YOUR_API_KEY",
-*};
-* 
-* const staticMapURL = generateStaticMapURL(mapParams);
-* console.log(staticMapURL);
 */
 
 function generateStaticMapURL(params) {
@@ -33,8 +22,10 @@ function generateStaticMapURL(params) {
     queryParams.push(`key=${params.apiKey || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`); // Replace with your own API key
 
     // Add optional parameters
-    if (params.markers) {
-        queryParams.push(`markers=${encodeURIComponent(params.markers)}`);
+    if (params.markers?.length) {
+        for (const marker of params.markers) {
+            queryParams.push(`markers=${encodeURIComponent(marker)}`);
+        }
     }
 
     if (params.mapType) {

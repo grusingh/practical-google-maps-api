@@ -6,7 +6,10 @@ export default function Home() {
     center: "Eiffel+Tower,Paris",
     zoom: 12,
     size: "800x600",
-    markers: "color:red|label:A|Eiffel+Tower,Paris",
+    markers: [
+      "color:red|label:E|Eiffel+Tower,Paris",
+      "color:blue|label:M|Musée Rodin,Paris"
+    ],
   });
 
   return (
