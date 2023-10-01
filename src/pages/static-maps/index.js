@@ -119,6 +119,7 @@ color:blue|label:M|Jardin des Plantes,Paris`
                     <a className="text-blue-500 hover:text-blue-700"
                        href="https://developers.google.com/maps/documentation/maps-static/start">Google Static Maps Documentation</a>
                     <ul className="p-4 rounded-md">
+                        <li>Center: <b>48.8584, 2.2945</b></li>
                         <li>Different <b>Zoom levels, Map Types and Scale</b></li>
                         <li></li>
                         <li>
@@ -126,7 +127,7 @@ color:blue|label:M|Jardin des Plantes,Paris`
                         </li>
                         <li>
                             Change <b>Markers</b> to use image icons<br/>
-                            <code className="block bg-gray-100 p-2 m-1">icon:https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png|Eiffel Tower,Paris</code>
+                            <code className="block bg-gray-100 p-2 m-1">icon:https://goo.gl/1oTJ9Y|Malakoff,Paris</code>
                         </li>
                     </ul>
                 </div>
