@@ -7,7 +7,7 @@ export default function Home() {
                 <h2 className="text-xl font-bold text-gray-900 mt-4">Table of Contents</h2>
                 <ul className="mt-4">
                     <li>
-                        <a href="/static-maps" className="text-blue-500 hover:text-blue-700">Static Maps</a>
+                        <a href="/static-map-api" className="text-blue-500 hover:text-blue-700">Static Map API</a>
                     </li>
                 </ul>
             </main>

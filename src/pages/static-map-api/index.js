@@ -7,7 +7,7 @@ export default function Home() {
     const [visible, setVisible] = useState("Eiffel Tower,Paris|Jardin des Plantes,Paris");
     const [scale, setScale] = useState("1");
     const [zoom, setZoom] = useState("12");
-    const [size, setSize] = useState("480x480");
+    const [size, setSize] = useState("400x300");
     const [path, setPath] = useState("color:0x0000ff|weight:5|Eiffel Tower,Paris|Jardin des Plantes,Paris");
     const [markersString, setMarkersString] = useState(
         `color:red|label:E|Eiffel Tower,Paris
