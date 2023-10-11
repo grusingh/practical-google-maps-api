@@ -9,6 +9,9 @@ export default function Home() {
                     <li>
                         <a href="/static-map-api" className="text-blue-500 hover:text-blue-700">Static Map API</a>
                     </li>
+                    <li>
+                        <a href="/embed-api" className="text-blue-500 hover:text-blue-700">Embed API</a>
+                    </li>
                 </ul>
             </main>
 

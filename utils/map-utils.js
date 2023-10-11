@@ -49,4 +49,69 @@ function generateStaticMapURL(params) {
     return `${baseURL}${queryParams.join("&")}`;
 }
 
+export function generateEmbedUrl(params) {
+    const baseURL = "https://www.google.com/maps/embed/v1/";
+    const queryParams = [];
+
+    queryParams.push(`key=${params.apiKey || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`); // Replace with your own API key
+
+    if (!params.embedMode.trim().length) {
+        throw new Error("Embed Mode is required");
+    }
+
+    if (params.embedMode === "place" || params.embedMode === "search") {
+        queryParams.push(`q=${encodeURIComponent(params.query)}`);
+    }
+
+    if (params.embedMode === "directions") {
+        if (params.origin.trim().length > 0) {
+            queryParams.push(`origin=${params.origin}`);
+        }
+
+        if (params.destination.trim().length > 0) {
+            queryParams.push(`destination=${params.destination}`);
+        }
+
+        if (params.waypoints.trim().length > 0) {
+            queryParams.push(`waypoints=${params.waypoints}`);
+        }
+
+        if (params.directionsMode.trim().length > 0) {
+            queryParams.push(`mode=${params.directionsMode}`);
+        }
+
+        if (params.avoid.trim().length > 0) {
+            queryParams.push(`avoid=${params.avoid}`);
+        }
+
+        if (params.units.trim().length > 0) {
+            queryParams.push(`units=${params.units}`);
+        }
+    }
+
+    if (params.embedMode === "streetview") {
+        if (params.pano.trim().length > 0) {
+            queryParams.push(`pano=${params.pano}`);
+        }
+
+        if (params.location.trim().length > 0) {
+            queryParams.push(`location=${params.location}`);
+        }
+    } else {
+        if (params.center.trim().length > 0) {
+            queryParams.push(`center=${encodeURIComponent(params.center)}`);
+        }
+
+        if (params.zoom.trim().length > 0) {
+            queryParams.push(`zoom=${params.zoom}`);
+        }
+
+        if (params.mapType.trim().length > 0) {
+            queryParams.push(`maptype=${params.mapType}`);
+        }
+    }
+
+    return `${baseURL}${params.embedMode}?${queryParams.join("&")}`;
+}
+
 export default generateStaticMapURL;
