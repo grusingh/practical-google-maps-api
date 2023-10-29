@@ -6,7 +6,11 @@ This repository is for the Practical Google Maps API for Frontend Developers Ude
 
 ## Setup
 1. Clone the repository
-2. Create a `.env.local` file in the root directory and add your Google Maps API key as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY`
+2. Create a `.env.local` file in the root directory and add following:
+```
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY
+NEXT_PUBLIC_GOOGLE_MAP_ID=YOUR_MAP_ID
+```
 3. Run `npm install` to install the dependencies
 4. Run `npm run dev` to start the development server
 

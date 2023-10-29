@@ -12,6 +12,9 @@ export default function Home() {
                     <li>
                         <a href="/embed-api" className="text-blue-500 hover:text-blue-700">Embed API</a>
                     </li>
+                    <li>
+                        <a href="/javascript-api" className="text-blue-500 hover:text-blue-700">JavaScript API</a>
+                    </li>
                 </ul>
             </main>
 
