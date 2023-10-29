@@ -28,23 +28,15 @@ export default function Page() {
     }, []);
 
     // customize map
-    useEffect(() => {
-        async function customizeMap() {
-            const {AdvancedMarkerElement} = await window.google.maps.importLibrary("marker");
+    async function showMarker() {
+        const {AdvancedMarkerElement} = await window.google.maps.importLibrary("marker");
 
-            const marker = new AdvancedMarkerElement({
-                map: map,
-                position: center,
-                title: "Eiffel Tower",
-            });
-        }
-
-        // wait for map to be ready
-        if (map) {
-            customizeMap();
-        }
-
-    }, [map]);
+        const marker = new AdvancedMarkerElement({
+            map: map,
+            position: center,
+            title: "Eiffel Tower",
+        });
+    }
 
     return (
         <main className='h-screen'>
@@ -57,6 +49,11 @@ export default function Page() {
                 <a className="text-blue-500 hover:text-blue-700" href="/">Home</a>
             </div>
             <div ref={mapRef} className="w-full h-2/3 mt-4"/>
+            <div className="p-4">
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={showMarker}>
+                    Show Marker
+                </button>
+            </div>
         </main>
     )
 }
