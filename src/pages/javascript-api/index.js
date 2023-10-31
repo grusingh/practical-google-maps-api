@@ -2,10 +2,19 @@ import {useEffect, useRef} from "react";
 import {Loader} from "@googlemaps/js-api-loader";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
+const styles = [
+    {
+        featureType: "all",
+        stylers: [{ visibility: "off" }],
+    },
+];
+
 export default function Page() {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const center = {lat: 48.8584, lng: 2.2945};
+    const location1 = {lat: 48.856190, lng: 2.294830};
+    const location2 = {lat: 48.855920, lng: 2.298160};
     const zoom = 15;
 
     // initialize map
@@ -20,6 +29,7 @@ export default function Page() {
             const map = new Map(mapContainerRef.current, {
                     center,
                     zoom,
+                    // styles,
                     // disableDefaultUI: true,
                     zoomControl: true,
                     mapTypeControl: true,
@@ -38,19 +48,48 @@ export default function Page() {
             button.addEventListener('click', showMarker);
             map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(button);
 
-            // setMap(map);
             mapRef.current = map;
         });
     }, []);
 
     // customize map
     async function showMarker() {
-        const {AdvancedMarkerElement} = await window.google.maps.importLibrary("marker");
+        const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
 
+        // basic marker
         new AdvancedMarkerElement({
             map: mapRef.current,
             position: center,
             title: "Eiffel Tower",
+        });
+
+        // custom marker with pin
+        const pin = new PinElement({
+            background: '#fcabf6',
+            borderColor: '#ff0000',
+            glyphColor: '#ffffff',
+            glyph: '🍏',
+            scale: 1.5,
+        });
+
+        new AdvancedMarkerElement({
+            map: mapRef.current,
+            position: location1,
+            content: pin.element,
+        });
+
+        // custom marker with image
+        const imageTag = document.createElement('img');
+        imageTag.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Latte_and_dark_coffee.jpg';
+        imageTag.style.width = '70px';
+        imageTag.style.height = '70px';
+        imageTag.style.borderRadius = '50%';
+
+        new AdvancedMarkerElement({
+            map: mapRef.current,
+            position: location2,
+            content: imageTag,
+            title: "My Coffee Place near Eiffel Tower",
         });
     }
 
@@ -66,7 +105,8 @@ export default function Page() {
             </div>
             <div ref={mapContainerRef} className="w-full h-2/3 mt-4"/>
             <div className="p-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={showMarker}>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={showMarker}>
                     Show Marker
                 </button>
             </div>
