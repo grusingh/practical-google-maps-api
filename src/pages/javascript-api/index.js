@@ -15,6 +15,7 @@ export default function Page() {
     const center = {lat: 48.8584, lng: 2.2945};
     const location1 = {lat: 48.856190, lng: 2.294830};
     const location2 = {lat: 48.855920, lng: 2.298160};
+    const location3 = {lat: 48.857490, lng: 2.294990};
     const zoom = 15;
 
     // initialize map
@@ -56,11 +57,23 @@ export default function Page() {
     async function showMarker() {
         const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
 
-        // basic marker
+        // legacy marker
+        new google.maps.Marker({
+            map: mapRef.current,
+            position: location3,
+            title: "Legacy Marker",
+            label: 'L',
+        });
+
+        // basic Advanced marker
+        const pinContent = new PinElement({
+            glyph: "A",
+          });
         new AdvancedMarkerElement({
             map: mapRef.current,
             position: center,
-            title: "Eiffel Tower",
+            title: "Advanced Eiffel Tower",
+            content: pinContent.element,
         });
 
         // custom marker with pin
