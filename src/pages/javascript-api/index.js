@@ -2,13 +2,6 @@ import {useEffect, useRef} from "react";
 import {Loader} from "@googlemaps/js-api-loader";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-const styles = [
-    {
-        featureType: "all",
-        stylers: [{ visibility: "off" }],
-    },
-];
-
 export default function Page() {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
@@ -57,12 +50,26 @@ export default function Page() {
     async function showMarker() {
         const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
 
+        const infowindow = new window.google.maps.InfoWindow({
+            content: `<div class="text-center">
+                        <h1 class="text-2xl font-bold">Eiffel Tower</h1>
+                        <p class="text-gray-500">Paris, France</p>
+                        <img class="w-48 h-48 mt-2" src="//upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/250px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg" alt="Eiffel Tower">
+                        <a class="text-blue-500 hover:text-blue-700" href="https://en.wikipedia.org/wiki/Eiffel_Tower">Wikipedia</a>
+                    </div>`,
+            ariaLabel: "Eiffel Tower",
+        });
+
         // legacy marker
-        new google.maps.Marker({
+        const legacyMarker = new window.google.maps.Marker({
             map: mapRef.current,
             position: location3,
             title: "Legacy Marker",
             label: 'L',
+        });
+
+        legacyMarker.addListener("click", () => {
+            infowindow.open(mapRef.current, legacyMarker);
         });
 
         // basic Advanced marker
@@ -85,10 +92,21 @@ export default function Page() {
             scale: 1.5,
         });
 
-        new AdvancedMarkerElement({
+        const advMarker = new AdvancedMarkerElement({
             map: mapRef.current,
             position: location1,
             content: pin.element,
+        });
+
+        advMarker.addListener("click", () => {
+            infowindow.close();
+            infowindow.setContent(`<div class="text-center">
+                    <h1 class="text-2xl font-bold">Lorem Ipsum</h1>
+                    <p class="text-gray-500">
+                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Duo Reges: constructio interrete. Quae cum dixisset paulumque institisset, Quid est? Quae cum essent dicta, discessimus. Quae cum dixisset paulumque institisset, Quid est? Quae cum essent dicta, discessimus. Quae cum dixisset paulumque institisset, Quid est? Quae cum essent dicta, discessimus.\`);
+                    </p>
+                </div>`);
+            infowindow.open(mapRef.current, advMarker);
         });
 
         // custom marker with image
