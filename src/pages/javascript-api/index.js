@@ -1,6 +1,19 @@
 import {useEffect, useRef} from "react";
 import {Loader} from "@googlemaps/js-api-loader";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
+
+const locationsNearEiffelTower = [
+    {lat: 48.8584, lng: 2.2945}, // Eiffel Tower
+    {lat: 48.8606, lng: 2.3376}, // Louvre Museum
+    {lat: 48.8529, lng: 2.3508}, // Notre-Dame de Paris
+    {lat: 48.8635, lng: 2.2875}, // Arc de Triomphe
+    {lat: 48.8600, lng: 2.3275}, // Tuileries Garden
+    {lat: 48.8566, lng: 2.3522}, // Centre Pompidou
+    {lat: 48.8611, lng: 2.2969}, // Quai Branly Museum
+    {lat: 48.8601, lng: 2.3126}, // Place de la Concorde
+    {lat: 48.8718, lng: 2.3088}, // Palais de Tokyo
+    {lat: 48.8625, lng: 2.2879}, // Trocadéro Gardens
+];
 
 export default function Page() {
     const mapContainerRef = useRef(null);
@@ -36,21 +49,57 @@ export default function Page() {
             );
 
             // show custom control button on top center
-            const button = document.createElement('button');
-            button.textContent = '😊 Show Marker';
-            button.classList.add('pointer', 'bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'text-lg', 'mt-2');
-            button.addEventListener('click', showMarker);
-            map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(button);
+            const buttonMarker = document.createElement('button');
+            buttonMarker.textContent = '😊 Show Marker';
+            buttonMarker.classList.add('pointer', 'bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'text-lg', 'mt-2', 'mr-2');
+            buttonMarker.addEventListener('click', showMarker);
 
+            const buttonCluster = document.createElement('button');
+            buttonCluster.textContent = '😊 Show Cluster';
+            buttonCluster.classList.add('pointer', 'bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'text-lg', 'mt-2');
+            buttonCluster.addEventListener('click', showCluster);
+
+            map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(buttonMarker);
+            map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(buttonCluster);
             mapRef.current = map;
         });
     }, []);
 
     // customize map
+    async function showCluster() {
+        const { InfoWindow } = await window.google.maps.importLibrary("maps");
+        const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
+        const infoWindow = new InfoWindow({
+            content: "",
+        });
+
+        const markers = locationsNearEiffelTower.map((position, i) => {
+            const label = `${i + 1}`;
+            const pinGlyph = new PinElement({
+                glyph: label,
+                glyphColor: "white",
+            });
+            const marker = new AdvancedMarkerElement({
+                position,
+                content: pinGlyph.element,
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.setContent(position.lat + ", " + position.lng);
+                infoWindow.open(mapRef.current, marker);
+            });
+
+            return marker;
+        });
+
+        mapRef.current.setZoom(11);
+        new MarkerClusterer({ markers, map: mapRef.current });
+    }
+
     async function showMarker() {
         const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
 
-        const infowindow = new window.google.maps.InfoWindow({
+        const infoWindow = new window.google.maps.InfoWindow({
             content: `<div class="text-center">
                         <h1 class="text-2xl font-bold">Eiffel Tower</h1>
                         <p class="text-gray-500">Paris, France</p>
@@ -69,13 +118,13 @@ export default function Page() {
         });
 
         legacyMarker.addListener("click", () => {
-            infowindow.open(mapRef.current, legacyMarker);
+            infoWindow.open(mapRef.current, legacyMarker);
         });
 
         // basic Advanced marker
         const pinContent = new PinElement({
             glyph: "A",
-          });
+        });
         new AdvancedMarkerElement({
             map: mapRef.current,
             position: center,
@@ -99,14 +148,14 @@ export default function Page() {
         });
 
         advMarker.addListener("click", () => {
-            infowindow.close();
-            infowindow.setContent(`<div class="text-center">
+            infoWindow.close();
+            infoWindow.setContent(`<div class="text-center">
                     <h1 class="text-2xl font-bold">Lorem Ipsum</h1>
                     <p class="text-gray-500">
                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Duo Reges: constructio interrete. Quae cum dixisset paulumque institisset, Quid est? Quae cum essent dicta, discessimus. Quae cum dixisset paulumque institisset, Quid est? Quae cum essent dicta, discessimus. Quae cum dixisset paulumque institisset, Quid est? Quae cum essent dicta, discessimus.\`);
                     </p>
                 </div>`);
-            infowindow.open(mapRef.current, advMarker);
+            infoWindow.open(mapRef.current, advMarker);
         });
 
         // custom marker with image
@@ -136,9 +185,13 @@ export default function Page() {
             </div>
             <div ref={mapContainerRef} className="w-full h-2/3 mt-4"/>
             <div className="p-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded"
                         onClick={showMarker}>
                     Show Marker
+                </button>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={showCluster}>
+                    Show Cluster
                 </button>
             </div>
         </main>
