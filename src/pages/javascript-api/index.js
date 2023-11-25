@@ -96,6 +96,48 @@ export default function Page() {
         new MarkerClusterer({ markers, map: mapRef.current });
     }
 
+    async function showShapes() {
+        const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
+        const { Circle, Rectangle } = await window.google.maps.importLibrary("maps");
+
+        new AdvancedMarkerElement({
+            map: mapRef.current,
+            position: locationsNearEiffelTower[0],
+            content: new PinElement({glyph: "1"}).element,
+        });
+        new Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.4,
+            strokeWeight: 2,
+            fillColor: "#00FF00",
+            fillOpacity: 0.20,
+            map: mapRef.current,
+            center: locationsNearEiffelTower[0],
+            radius: 150,
+        });
+
+        new AdvancedMarkerElement({
+            map: mapRef.current,
+            position: locationsNearEiffelTower[3],
+            content: new PinElement({glyph: "2"}).element,
+        });
+        const bounds = {
+            north: locationsNearEiffelTower[3].lat + 0.002,
+            south: locationsNearEiffelTower[3].lat - 0.002,
+            east: locationsNearEiffelTower[3].lng + 0.003,
+            west: locationsNearEiffelTower[3].lng - 0.003
+        };
+        new Rectangle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.4,
+            strokeWeight: 2,
+            fillColor: "#00FF00",
+            fillOpacity: 0.20,
+            map: mapRef.current,
+            bounds,
+        });
+    }
+
     async function showMarker() {
         const {AdvancedMarkerElement, PinElement} = await window.google.maps.importLibrary("marker");
 
@@ -189,9 +231,13 @@ export default function Page() {
                         onClick={showMarker}>
                     Show Marker
                 </button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded"
                         onClick={showCluster}>
                     Show Cluster
+                </button>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={showShapes}>
+                    Show Shapes
                 </button>
             </div>
         </main>
