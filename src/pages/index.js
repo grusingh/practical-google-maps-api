@@ -15,6 +15,9 @@ export default function Home() {
                     <li>
                         <a href="/javascript-api" className="text-blue-500 hover:text-blue-700">JavaScript API</a>
                     </li>
+                    <li>
+                        <a href="/src/pages/places-library" className="text-blue-500 hover:text-blue-700">Places Library</a>
+                    </li>
                 </ul>
             </main>
 
