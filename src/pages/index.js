@@ -18,6 +18,9 @@ export default function Home() {
                     <li>
                         <a href="/places-library" className="text-blue-500 hover:text-blue-700">Places Library</a>
                     </li>
+                    <li>
+                        <a href="/place-autocomplete" className="text-blue-500 hover:text-blue-700">Place Autocomplete</a>
+                    </li>
                 </ul>
             </main>
 
