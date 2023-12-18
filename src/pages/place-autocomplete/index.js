@@ -41,11 +41,10 @@ export default function Page() {
             fields: ["place_id", "geometry", "name"],
             types: ["establishment"],
             componentRestrictions: {country: "fr"},
-            locationBias: locationBias ? {
-                center: center,
-                radius: 1000,
-            } : undefined
         });
+
+        // use bounds bias to improve performance
+        autocomplete.bindTo("bounds", mapRef.current);
 
         autocomplete.addListener("place_changed", () => {
             const place = autocomplete.getPlace();
