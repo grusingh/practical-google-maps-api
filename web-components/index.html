@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Google Map Web Components</title>
+</head>
+<body>
+  <h1>Google Maps Web Components Demo</h1>
+  <p>
+    <a href="">GitHub Repository</a>
+  </p>
+  <div class="loading">
+    Loading...
+  </div>
+  <gmp-map id="demo-map" map-id="MAP_ID" center="40.6892,-74.0445" zoom="13" style="height: 600px;visibility: hidden;">
+    <gmp-advanced-marker class="my-marker" gmp-clickable position="40.6892,-74.0445" title="Statue of Liberty"></gmp-advanced-marker>
+    <gmp-advanced-marker class="my-marker" gmp-clickable position="40.748817,-73.985428" title="Empire State Building"></gmp-advanced-marker>
+    <gmp-advanced-marker class="my-marker" gmp-clickable position="40.758896,-73.985130" title="Times Square"></gmp-advanced-marker>
+    <gmp-advanced-marker class="my-marker" gmp-clickable position="40.706192,-74.009160" title="Wall Street"></gmp-advanced-marker>
+    <gmp-advanced-marker class="my-marker" gmp-clickable position="40.730610,-73.935242" title="Central Park"></gmp-advanced-marker>
+    <gmp-advanced-marker class="my-marker" gmp-clickable position="40.712776,-74.005974" title="One World Trade Center"></gmp-advanced-marker>
+  </gmp-map>
+
+  <gmpx-place-overview place="ChIJPTacEpBQwokRKwIlDXelxkA" size="large">
+    <gmpx-place-directions-button slot="action">
+      Directions
+    </gmpx-place-directions-button>
+  </gmpx-place-overview>
+
+  <gmpx-api-loader key="YOUR_API_KEY"></gmpx-api-loader>
+
+  <script>
+    window.addEventListener('load', () => {
+      const mapElement = document.getElementById('demo-map');
+      mapElement.style.visibility = 'visible';
+      document.getElementsByClassName('loading')[0].style.display = 'none';
+
+      const markers = document.querySelectorAll('gmp-advanced-marker.my-marker');
+      markers.forEach((marker) => {
+        marker.addEventListener('gmp-click', () => {
+          mapElement.innerMap.panTo(marker.position);
+
+          const infoWindow = new google.maps.InfoWindow({
+            content: `<div style="color: green; font-weight: bold;">${marker.title}</div>`,
+          });
+          infoWindow.open(mapElement.innerMap, marker);
+        });
+      });
+    });
+  </script>
+
+  <script async type="module"
+          src="https://unpkg.com/@googlemaps/extended-component-library@~0.1" defer></script>
+</body>
+</html>

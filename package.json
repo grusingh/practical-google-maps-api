@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "web-components": "npx nodemon server.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
